@@ -7,10 +7,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var Version = "v0.1.0"
+
 var rootCmd = &cobra.Command{
-	Use:   "goinit",
-	Short: "GoInit is a Vite-like project generator for Go",
-	Long:  "GoInit helps developers create production-ready Go projects.",
+	Use:     "goinit",
+	Short:   "GoInit is a Vite-like project generator for Go",
+	Long:    "GoInit helps developers create production-ready Go projects.",
+	Version: Version,
 }
 
 func Execute() {
