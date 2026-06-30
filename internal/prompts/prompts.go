@@ -2,43 +2,32 @@ package prompts
 
 import "github.com/charmbracelet/huh"
 
-func AskQuestions() (*Config, error) {
-	cfg := &Config{}
+func AskProjectName(name *string) error {
+	return huh.NewInput().
+		Title("Project name").
+		Value(name).
+		Run()
+}
 
-	form := huh.NewForm(
-		huh.NewGroup(
-			huh.NewInput().
-				Title("Project name").
-				Value(&cfg.ProjectName),
+func AskFramework(framework *string) error {
+	return huh.NewSelect[string]().
+		Title("Select framework").
+		Options(
+			huh.NewOption("Gin", "gin"),
+			huh.NewOption("Fiber", "fiber"),
+		).
+		Value(framework).
+		Run()
+}
 
-			huh.NewSelect[string]().
-				Title("Framework").
-				Options(
-					huh.NewOption("Gin", "gin"),
-					huh.NewOption("Fiber", "fiber"),
-				).
-				Value(&cfg.Framework),
-
-			huh.NewSelect[string]().
-				Title("Database").
-				Options(
-					huh.NewOption("PostgreSQL", "postgres"),
-					huh.NewOption("MySQL", "mysql"),
-					huh.NewOption("None", "none"),
-				).
-				Value(&cfg.Database),
-
-			huh.NewConfirm().
-				Title("Enable JWT authentication?").
-				Value(&cfg.JWT),
-
-			huh.NewConfirm().
-				Title("Add Docker support?").
-				Value(&cfg.Docker),
-		),
-	)
-
-	err := form.Run()
-
-	return cfg, err
+func AskDatabase(database *string) error {
+	return huh.NewSelect[string]().
+		Title("Select database").
+		Options(
+			huh.NewOption("PostgreSQL", "postgres"),
+			huh.NewOption("MySQL", "mysql"),
+			huh.NewOption("None", "none"),
+		).
+		Value(database).
+		Run()
 }
