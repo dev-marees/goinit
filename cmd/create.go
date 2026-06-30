@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/dev-marees/goinit/internal/generator"
 	"github.com/dev-marees/goinit/internal/prompts"
 	"github.com/spf13/cobra"
 )
@@ -42,12 +43,12 @@ var createCmd = &cobra.Command{
 			}
 		}
 
-		fmt.Println()
-		fmt.Println("Configuration")
-		fmt.Println("-------------")
-		fmt.Println("Project   :", cfg.ProjectName)
-		fmt.Println("Framework :", cfg.Framework)
-		fmt.Println("Database  :", cfg.Database)
+		err := generator.Generate(cfg)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println("✔ Project created successfully")
 
 		return nil
 	},
