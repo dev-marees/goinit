@@ -25,7 +25,7 @@ Instead of spending time creating folders, configuring Docker, or organizing you
 ### Using Go
 
 ```bash
-go install github.com/<your-github-username>/goinit@latest
+go install github.com/dev-marees/goinit@latest
 ```
 
 Verify:
