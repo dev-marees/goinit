@@ -7,22 +7,47 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	projectName string
+	framework   string
+	database    string
+)
+
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new Go project",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		cfg, err := prompts.AskQuestions()
-		if err != nil {
-			return err
+		cfg := prompts.Config{
+			ProjectName: projectName,
+			Framework:   framework,
+			Database:    database,
 		}
 
-		fmt.Println("\nConfiguration:")
-		fmt.Println("Project:", cfg.ProjectName)
-		fmt.Println("Framework:", cfg.Framework)
-		fmt.Println("Database:", cfg.Database)
-		fmt.Println("JWT:", cfg.JWT)
-		fmt.Println("Docker:", cfg.Docker)
+		if cfg.ProjectName == "" {
+			if err := prompts.AskProjectName(&cfg.ProjectName); err != nil {
+				return err
+			}
+		}
+
+		if cfg.Framework == "" {
+			if err := prompts.AskFramework(&cfg.Framework); err != nil {
+				return err
+			}
+		}
+
+		if cfg.Database == "" {
+			if err := prompts.AskDatabase(&cfg.Database); err != nil {
+				return err
+			}
+		}
+
+		fmt.Println()
+		fmt.Println("Configuration")
+		fmt.Println("-------------")
+		fmt.Println("Project   :", cfg.ProjectName)
+		fmt.Println("Framework :", cfg.Framework)
+		fmt.Println("Database  :", cfg.Database)
 
 		return nil
 	},
@@ -30,4 +55,26 @@ var createCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(createCmd)
+
+	createCmd.Flags().StringVarP(
+		&projectName,
+		"name",
+		"n",
+		"",
+		"Project name",
+	)
+
+	createCmd.Flags().StringVar(
+		&framework,
+		"framework",
+		"",
+		"Framework (gin|fiber)",
+	)
+
+	createCmd.Flags().StringVar(
+		&database,
+		"database",
+		"",
+		"Database (postgres|mysql|none)",
+	)
 }
